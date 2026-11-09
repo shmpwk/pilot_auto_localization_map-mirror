@@ -98,20 +98,27 @@ Without `--push`, `tools/mirror.py mirror` and `tools/mirror.py combine` are dry
 
 ### Manual sync
 
-Publishing is **fast-forward only** (never `--force`). This is the local
-equivalent of `.github/workflows/mirror.yaml`.
+Local equivalent of `.github/workflows/mirror.yaml`. Whether a published
+branch is pushed with `--force` follows the `force:` flag in
+`.sync/sources.yaml` (`awf-latest` is intentionally non-forced; other mirrors
+and combined targets may force). Do not confuse that with
+`git filter-repo --force`, which only rewrites the scratch clone under `WORK`.
+
+Run this from a separate clone or worktree so your working branch stays
+clean, and install dependencies in a venv.
 
 ```bash
 git checkout ci && git pull origin ci
+python3 -m venv .venv && source .venv/bin/activate
 python3 -m pip install pyyaml 'git-filter-repo==2.47.0'
 
-PUSH=0 ./tools/manual_sync.sh   # dry run (build only)
-PUSH=1 ./tools/manual_sync.sh   # push to origin
+./tools/manual_sync.sh         # dry run (default; build only)
+PUSH=1 ./tools/manual_sync.sh  # push to origin
 ```
 
 | Variable | Default | Meaning |
 | --- | --- | --- |
-| `PUSH` | `1` | Set `0` for a dry run |
+| `PUSH` | `0` | Set `1` to push; omit or `0` for a dry run |
 | `DOWNSTREAM` | `git@github.com:tier4/pilot_auto_localization_map.git` | Git remote to push |
 | `WORK` | `/tmp/pilot_auto_localization_map-sync` | Scratch directory for clones |
 

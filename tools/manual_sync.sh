@@ -7,7 +7,7 @@ cd "$ROOT"
 
 DOWNSTREAM="${DOWNSTREAM:-git@github.com:tier4/pilot_auto_localization_map.git}"
 WORK="${WORK:-/tmp/pilot_auto_localization_map-sync}"
-PUSH="${PUSH:-1}"
+PUSH="${PUSH:-0}"
 
 mkdir -p "$WORK"
 export PYTHONPATH="$ROOT/tools${PYTHONPATH:+:$PYTHONPATH}"
