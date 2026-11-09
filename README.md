@@ -82,8 +82,8 @@ This is checked rather than assumed:
 - Every push reports whether the previously published tip is still an ancestor
   of the new one. A fast-forward means the contract held; anything else is
   reported as a rewrite.
-- `awf-latest` is pushed without `--force` on purpose, so losing
-  reproducibility there fails the job instead of silently republishing.
+- Published branches are pushed without `--force` on purpose, so losing
+  reproducibility fails the job instead of silently republishing.
 
 ### Working on the configuration
 
@@ -98,11 +98,10 @@ Without `--push`, `tools/mirror.py mirror` and `tools/mirror.py combine` are dry
 
 ### Manual sync
 
-Local equivalent of `.github/workflows/mirror.yaml`. Whether a published
-branch is pushed with `--force` follows the `force:` flag in
-`.sync/sources.yaml` (`awf-latest` is intentionally non-forced; other mirrors
-and combined targets may force). Do not confuse that with
-`git filter-repo --force`, which only rewrites the scratch clone under `WORK`.
+Local equivalent of `.github/workflows/mirror.yaml`. Publishing is
+**fast-forward only** (every `force:` in `.sync/sources.yaml` is `false`).
+Do not confuse that with `git filter-repo --force`, which only rewrites the
+scratch clone under `WORK`.
 
 Run this from a separate clone or worktree so your working branch stays
 clean, and install dependencies in a venv.
